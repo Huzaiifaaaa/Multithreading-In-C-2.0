@@ -28,11 +28,14 @@ If count==12, returns filled, else not filled
 #include <sys/file.h>
 #include<sys/types.h>
 #include<fcntl.h>
+#include<semaphore.h>
 #include<unistd.h>//including respective header files
 
 int GenerateRandom(int upper,int lower);//generates random number & returns it
 void AssignSeat(int *AllocationData);//allocated seat
 int SeatNotFound(int *AllocationData,int BusID);//if no seat is found
+
+sem_t semaphore;//declaring semaphore
 
 int GenerateRandom(int upper,int lower)//generates random numbers,takes upper & lower limit, returns number between limits
 {
@@ -85,6 +88,8 @@ int SeatNotFound(int *AllocationData,int BusID)//checks if seat is available or 
 
 void AssignSeat(int *AllocationData)//responsible for assigning seats, takes global array
 {
+    sem_wait(&semaphore);//semaphore wait
+    sleep(1);//adds delay of 1 second
     int BusID;
     int SeatID;//declaring & initializing array
     int SellerID=AllocationData[59];
@@ -153,6 +158,7 @@ void AssignSeat(int *AllocationData)//responsible for assigning seats, takes glo
     }
 
     printf("---%d---------%d----------%d-------%d\n",SellerID,BusID,PassengerID,SeatID);//printing SellerID--BusID--PassengerID--SeatID
+    sem_post(&semaphore);//semaphore post
 }
 
 int main()//main function
@@ -179,43 +185,53 @@ int main()//main function
 
         if(MachineID==1)//if machine 1 is selected
         {
+            sem_init(&semaphore,0,1);//initializing semaphore
             AllocationData[59]=1;//passing machineID at allocationData[59]
             AllocationData[60]=PassengerIDs[i];//passing passengerID at allocationData[60]
             pthread_t Machine1;//creating Machine 1 Thread
             pthread_create(&Machine1,NULL,AssignSeat,AllocationData);//passing args
             pthread_join(Machine1,NULL);
+            sem_destroy(&semaphore);//destroying semaphore
         }
         else if(MachineID==2)//if machine 2 is selected
         {
+            sem_init(&semaphore,0,1);//initializing semaphore
             AllocationData[59]=2;//passing machineID at allocationData[59]
             AllocationData[60]=PassengerIDs[i];//passing passengerID at allocationData[60]
             pthread_t Machine2;//creating Machine 2 Thread
             pthread_create(&Machine2,NULL,AssignSeat,AllocationData);//passing args
             pthread_join(Machine2,NULL);
+            sem_destroy(&semaphore);//destroying semaphore
         }
         else if(MachineID==3)//if machine 3 is selected
         {
+            sem_init(&semaphore,0,1);//initializing semaphore
             AllocationData[59]=3;//passing machineID at allocationData[59]
             AllocationData[60]=PassengerIDs[i];//passing passengerID at allocationData[60]
             pthread_t Machine3;//creating Machine 3 Thread
             pthread_create(&Machine3,NULL,AssignSeat,AllocationData);//passing args
             pthread_join(Machine3,NULL);
+            sem_destroy(&semaphore);//destroying semaphore
         }
         else if(MachineID==4)//if machine 4 is selected
         {
+            sem_init(&semaphore,0,1);//initializing semaphore
             AllocationData[59]=4;//passing machineID at allocationData[59]
             AllocationData[60]=PassengerIDs[i];//passing passengerID at allocationData[60]
             pthread_t Machine4;//creating Machine 4 Thread
             pthread_create(&Machine4,NULL,AssignSeat,AllocationData);//passing args
             pthread_join(Machine4,NULL);
+            sem_destroy(&semaphore);//destroying semaphore
         }
         else//if machine 5 is selected
         {
+            sem_init(&semaphore,0,1);//initializing semaphore
             AllocationData[59]=5;//passing machineID at allocationData[59]
             AllocationData[60]=PassengerIDs[i];//passing passengerID at allocationData[60]
             pthread_t Machine5;//creating Machine 5 Thread
             pthread_create(&Machine5,NULL,AssignSeat,AllocationData);//passing args
             pthread_join(Machine5,NULL);
+            sem_destroy(&semaphore);//destroying semaphore
         }
     }//end of for loop
     return 0;//returning zero

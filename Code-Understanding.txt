@@ -1,0 +1,19 @@
+HOW IT WORKS?------>ALSO INCLUDED IN MAIN.C FILE AT TOP.
+
+We have 3 Buses, each with 12 seats so Total Passengers = Buses x Seats = 3 x 12=36
+We have made an array for these 36 passengers, having PassengerIDs randomly.
+We have a global array which stores all data (BEFORE BOOKING ALL ZERO)(INDEX 1 TO 12 FOR BUS1) (INDEX 21 TO 32 FOR BUS2) (INDEX 41 TO 52 FOR BUS3) , INDEX 59 STORES MACHINEID(RANDOMLY GENERTED) AND INDEX 60 HAS PASSENGER ID FROM ARRAY
+A for loop is run 36 times (once for each passenger), in for loop we have 5 Threads/Machines which are selected randomly by random number generator.
+When a thread is selected the function AssignSeats is executed.
+
+In assignSeat function, we get MachineID/SellerID & PassengerID from global array.
+We generate random number between 1 & 3 for randomly selected bus.
+
+Once bus is selected, it is checked whether it is filled or not via *SeatNotFound Function. If not filled random seat numbers are generated, then corresponding global array is checked if its filled or not. If not filled(fill it), otherwise repeat it.
+It is repeated for each bus
+
+*SEATNOTFOUND FUNCTION
+
+Takes BusID & Global Array.
+Counts for corresponding number of occupied seats in respected bus & respective array range.
+If count==12, returns filled, else not filled
